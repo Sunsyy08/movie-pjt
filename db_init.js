@@ -47,6 +47,23 @@ db.serialize(() => {
     stmt.finalize();
 });
 
+
+// comments 테이블 생성
+db.serialize(() => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            movie_id INTEGER,
+            username TEXT DEFAULT 'Anonymous',  -- 로그인하지 않은 사용자도 익명으로 댓글 작성
+            content TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(movie_id) REFERENCES movies(id)
+        )
+    `);
+});
+
+
+
 db.close(() => {
     console.log('데이터 삽입 완료!');
 });
